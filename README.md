@@ -8,7 +8,10 @@ As much as I despise using generative AI for programming, I had to use it due to
 This is a project I've wanted to do for a while, and there are no up-to-date Java libraries for Stream Decks.
 Some libraries that I looked at were last updated in 2017 and unmaintained. 
 
-(note to self: put down links for libraries)
+Libraries used for references:
+- [abcminiuser/python-elgato-streamdeck](https://github.com/abcminiuser/python-elgato-streamdeck)
+- [OpenActionAPI/rust-elgato-streamdeck](https://github.com/OpenActionAPI/rust-elgato-streamdeck)
+- [Julusian/node-elgato-stream-deck](https://github.com/Julusian/node-elgato-stream-deck)
 
 Now as a rule of thumb, I **always reviewed the generated code and make changes as needed. This mod is not 100% fully AI-generated**
 Generative AI was only used for this API and no other repository within Stream Decked.
