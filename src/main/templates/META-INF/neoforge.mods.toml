@@ -18,8 +18,8 @@ description='''
 A library for mods to have functionality with Elgato's Stream Decks
 '''
 
-#[[mixins]]
-#config="streamdecked.mixins.json"
+[[mixins]]
+config="streamdecked.mixins.json"
 
 [[dependencies.streamdecked]]
 modId="neoforge"

@@ -1,0 +1,61 @@
+package dev.wolfieboy09.streamdecked.event;
+
+import dev.wolfieboy09.streamdecked.core.StreamDeckManager;
+import java.util.Collection;
+import net.neoforged.bus.api.Event;
+import net.neoforged.fml.event.IModBusEvent;
+import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
+
+/**
+ * Fired on the <b>mod event bus</b>, once, right after the driver thread starts and before any
+ * deck is opened. The place to adjust driver-wide settings. Addons that only want to put buttons
+ * on a panel should implement {@link StreamDeckedPlugin}
+ * instead.
+ *
+ */
+@SuppressWarnings("unused")
+public class StreamDeckSetupEvent extends Event implements IModBusEvent {
+
+    private final StreamDeckManager manager;
+    private int defaultBrightness = 80;
+    private boolean resetOnConnect = true;
+
+    public StreamDeckSetupEvent(StreamDeckManager manager) {
+        this.manager = manager;
+    }
+
+    /** The live driver. Queue work on it if you need something outside the layout system. */
+    public StreamDeckManager getManager() {
+        return manager;
+    }
+
+    /**
+     * Brightness applied to each deck as it connects, 0 to 100. Last listener to set it wins,
+     * so treat this as a default rather than a user setting.
+     */
+    public void setDefaultBrightness(int percent) {
+        this.defaultBrightness = Math.clamp(percent, 0, 100);
+    }
+
+    public int getDefaultBrightness() {
+        return defaultBrightness;
+    }
+
+    /** Whether a connecting deck is reset and blanked before layouts run. On by default. */
+    public void setResetOnConnect(boolean reset) {
+        this.resetOnConnect = reset;
+    }
+
+    public boolean isResetOnConnect() {
+        return resetOnConnect;
+    }
+
+    /**
+     * Restricts this driver to only the listed deck ids (serial numbers); every other attached
+     * Elgato device is left for the official software. Set on the manager directly so it applies
+     * to the very first scan.
+     */
+    public void setAllowedDeckIds(Collection<String> ids) {
+        manager.setAllowedDeckIds(ids);
+    }
+}

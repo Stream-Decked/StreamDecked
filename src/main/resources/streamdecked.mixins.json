@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.wolfieboy09.streamdecked.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "dev.wolfieboy09.streamdecked.StreamDeckedMixinPlugin",
+  "client": [
+    "MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
