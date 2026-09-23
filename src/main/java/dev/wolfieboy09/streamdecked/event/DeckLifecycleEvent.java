@@ -1,7 +1,7 @@
 package dev.wolfieboy09.streamdecked.event;
 
-import dev.wolfieboy09.streamdecked.core.DeckModel;
-import dev.wolfieboy09.streamdecked.core.DeckSurface;
+import dev.wolfieboy09.sd5j.core.DeckModel;
+import dev.wolfieboy09.sd5j.core.DeckSurface;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 

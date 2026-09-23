@@ -2,13 +2,13 @@ package dev.wolfieboy09.streamdecked.client;
 
 import dev.wolfieboy09.streamdecked.StreamDecked;
 import dev.wolfieboy09.streamdecked.StreamDeckedMixinDetection;
-import dev.wolfieboy09.streamdecked.core.DeckButton;
-import dev.wolfieboy09.streamdecked.core.DeckEvent;
-import dev.wolfieboy09.streamdecked.core.DeckModel;
-import dev.wolfieboy09.streamdecked.core.DeckSurface;
-import dev.wolfieboy09.streamdecked.core.StreamDeckManager;
-import dev.wolfieboy09.streamdecked.core.hid.Hid4JavaBackend;
-import dev.wolfieboy09.streamdecked.core.image.DeckImage;
+import dev.wolfieboy09.sd5j.core.DeckButton;
+import dev.wolfieboy09.sd5j.core.DeckEvent;
+import dev.wolfieboy09.sd5j.core.DeckModel;
+import dev.wolfieboy09.sd5j.core.DeckSurface;
+import dev.wolfieboy09.sd5j.core.StreamDeckManager;
+import dev.wolfieboy09.sd5j.remote.RemoteDeckTransport;
+import dev.wolfieboy09.sd5j.core.image.DeckImage;
 import dev.wolfieboy09.streamdecked.event.DeckInputEvent;
 import dev.wolfieboy09.streamdecked.event.DeckLifecycleEvent;
 import dev.wolfieboy09.streamdecked.event.StreamDeckSetupEvent;
@@ -47,7 +47,7 @@ public final class StreamDeckDriver {
     }
 
     private static StreamDeckManager doInstall() {
-        StreamDeckManager created = new StreamDeckManager(new Hid4JavaBackend());
+        StreamDeckManager created = new StreamDeckManager(new RemoteDeckTransport());
         created.addErrorHandler(t -> StreamDecked.LOGGER.error("Stream Deck driver error", t));
 
         StreamDeckSetupEvent setup = new StreamDeckSetupEvent(created);

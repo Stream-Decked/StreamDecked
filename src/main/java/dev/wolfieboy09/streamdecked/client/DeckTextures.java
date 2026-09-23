@@ -1,7 +1,7 @@
 package dev.wolfieboy09.streamdecked.client;
 
 import com.mojang.logging.LogUtils;
-import dev.wolfieboy09.streamdecked.core.image.DeckImage;
+import dev.wolfieboy09.sd5j.core.image.DeckImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

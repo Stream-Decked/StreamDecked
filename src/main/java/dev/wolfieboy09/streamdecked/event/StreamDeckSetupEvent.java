@@ -1,7 +1,6 @@
 package dev.wolfieboy09.streamdecked.event;
 
-import dev.wolfieboy09.streamdecked.core.StreamDeckManager;
-import java.util.Collection;
+import dev.wolfieboy09.sd5j.core.StreamDeckManager;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
 import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
@@ -48,14 +47,5 @@ public class StreamDeckSetupEvent extends Event implements IModBusEvent {
 
     public boolean isResetOnConnect() {
         return resetOnConnect;
-    }
-
-    /**
-     * Restricts this driver to only the listed deck ids (serial numbers); every other attached
-     * Elgato device is left for the official software. Set on the manager directly so it applies
-     * to the very first scan.
-     */
-    public void setAllowedDeckIds(Collection<String> ids) {
-        manager.setAllowedDeckIds(ids);
     }
 }

@@ -1,10 +1,9 @@
-+dev.wolfieboy09.streamdecked.core
++dev.wolfieboy09.sd5j.core
 +dev.wolfieboy09.streamdecked.event
 +dev.wolfieboy09.streamdecked.plugin
 
 -dev.wolfieboy09.streamdecked.client
--dev.wolfieboy09.streamdecked.core.hid
--dev.wolfieboy09.streamdecked.core.StreamDeck
--dev.wolfieboy09.streamdecked.core.StreamDeckManager
--dev.wolfieboy09.streamdecked.core.DeckEvent
+-dev.wolfieboy09.sd5j.core.StreamDeck
+-dev.wolfieboy09.sd5j.core.StreamDeckManager
+-dev.wolfieboy09.sd5j.core.DeckEvent
 -dev.wolfieboy09.streamdecked.StreamDecked

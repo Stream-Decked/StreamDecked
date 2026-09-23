@@ -19,7 +19,9 @@ sourceSets.main.resources {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
+    maven { url = uri("${projectDir}/../library/repo") }
 }
 
 base {
@@ -77,21 +79,15 @@ configurations {
 }
 
 dependencies {
-    jarJar(implementation("org.hid4java:hid4java")) {
+    jarJar(implementation("dev.wolfieboy09.sd5j:sd5j")) {
         version {
-            strictly '[0.8.0, 0.9)'
-            prefer "${hid4java_version}"
+            strictly '[1.0.0, 2.0)'
+            prefer "${sd5j_version}"
         }
+        exclude group: 'com.google.code.gson', module: 'gson'
+        exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    additionalRuntimeClasspath "org.hid4java:hid4java:${hid4java_version}"
-
-    jarJar(implementation("net.java.dev.jna:jna")) {
-        version {
-            strictly '[5.19.0, 6.0)'
-            prefer "${jna_version}"
-        }
-    }
-    additionalRuntimeClasspath "net.java.dev.jna:jna:${jna_version}"
+    additionalRuntimeClasspath "dev.wolfieboy09.sd5j:sd5j:${sd5j_version}"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
