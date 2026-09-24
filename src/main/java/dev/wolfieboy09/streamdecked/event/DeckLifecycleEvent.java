@@ -5,10 +5,7 @@ import dev.wolfieboy09.sd5j.core.DeckSurface;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 
-/**
- * Deck hotplug events, fired on the <b>game event bus</b> ({@code NeoForge.EVENT_BUS}) on the
- * client thread during the tick.
- */
+/** Deck hotplug events on the <b>game event bus</b> ({@code NeoForge.EVENT_BUS}), client thread during the tick. */
 @SuppressWarnings("unused")
 public abstract class DeckLifecycleEvent extends Event {
     private final DeckSurface surface;

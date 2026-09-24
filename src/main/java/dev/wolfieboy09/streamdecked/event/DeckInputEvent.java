@@ -8,9 +8,9 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 
 /**
- * Hardware input, fired on the <b>game event bus</b> on the client thread during the tick,
- * before the assigned {@link DeckButton} sees it. Cancelling stops the button callback from
- * running (how a mod intercepts a key another mod owns, or swallows the panel in a modal).
+ * Hardware input on the <b>game event bus</b>, fired on the client thread during the tick,
+ * before the assigned {@link DeckButton} sees it. Cancel to stop the button callback (how a
+ * mod intercepts a key another mod owns, or swallows the panel in a modal).
  */
 @SuppressWarnings("unused")
 public abstract class DeckInputEvent extends Event implements ICancellableEvent {

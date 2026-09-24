@@ -21,11 +21,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Discovers every mod's {@code streamdecked.plugin.json} (if it has one) and loads the
- * {@link StreamDeckedPlugin}s it declares.
- * {@code class} is required; {@code required_mods} is optional (the entry is skipped unless
- * those mods are loaded). A {@code class} that cannot be resolved is skipped with a log line,
- * not a hard error, so one file can declare plugins with different optional dependencies.
+ * Discovers every mod's {@code streamdecked.plugin.json} and loads the
+ * {@link StreamDeckedPlugin}s it declares. {@code class} is required, {@code required_mods}
+ * optional. A class that cannot be resolved is skipped with a log line, not a hard error.
  */
 public final class StreamDeckedPluginLoader {
     private StreamDeckedPluginLoader() {}

@@ -16,10 +16,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Loads Minecraft textures into {@link DeckImage}s. Flat files only for now.
- * Cached until {@link #invalidate()}.
- */
+/** Loads Minecraft textures into {@link DeckImage}s; cached until {@link #invalidate()}. */
 @SuppressWarnings("unused")
 public final class DeckTextures {
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -28,12 +25,7 @@ public final class DeckTextures {
 
     private static final Map<ResourceLocation, DeckImage> CACHE = new ConcurrentHashMap<>();
 
-    /**
-     * Loads a texture directly from the resource manager.
-     *
-     * @param texture texture resource location
-     * @return a copy of the decoded texture, or {@code null} if it is missing
-     */
+    /** Loads a texture directly from the resource manager, or null if missing. */
     @Nullable
     public static DeckImage load(ResourceLocation texture) {
         ResourceLocation png = ResourceLocation.fromNamespaceAndPath(
@@ -62,23 +54,15 @@ public final class DeckTextures {
     }
 
 
-    /**
-     * Loads an item's conventional texture.
-     *
-     * @param item Minecraft item
-     * @return the item's texture, or {@code null} if it cannot be found
-     */
+    /** Loads an item's conventional texture, or null. */
     @Nullable
     public static DeckImage item(Item item) {
         return item(new ItemStack(item));
     }
 
     /**
-     * Loads an item's conventional texture. Block items have no item texture and fall
-     * back to their block texture ({@code textures/item/...} -> {@code textures/block/...}).
-     *
-     * @param stack item stack
-     * @return the item's texture, or {@code null} if it cannot be found
+     * Loads an item's conventional texture. Block items have no item texture and fall back to
+     * their block texture ({@code textures/item/...} -> {@code textures/block/...}).
      */
     @Nullable
     public static DeckImage item(ItemStack stack) {
@@ -99,12 +83,7 @@ public final class DeckTextures {
         return image;
     }
 
-    /**
-     * Loads a block's conventional texture.
-     *
-     * @param block Minecraft block
-     * @return the block's texture, or {@code null} if it cannot be found
-     */
+    /** Loads a block's conventional texture, or null. */
     @Nullable
     public static DeckImage block(Block block) {
         ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
@@ -123,9 +102,6 @@ public final class DeckTextures {
         ));
     }
 
-    /**
-     * Loads a block texture from its registry ID.
-     */
     public static DeckImage loadBlockTexture(ResourceLocation blockId) {
         return load(ResourceLocation.fromNamespaceAndPath(
                 blockId.getNamespace(),
@@ -133,12 +109,7 @@ public final class DeckTextures {
         ));
     }
 
-    /**
-     * Scales an image using nearest-neighbor interpolation.
-     *
-     * <p>This is appropriate for Minecraft's pixel-art textures because
-     * bilinear filtering would blur the texture.</p>
-     */
+    /** Scales with nearest-neighbor interpolation; bilinear would blur pixel art. */
     public static DeckImage pixelScale(DeckImage source, int width, int height) {
         DeckImage out = new DeckImage(width, height);
 
@@ -154,10 +125,7 @@ public final class DeckTextures {
         return out;
     }
 
-    /**
-     * Scales an image using nearest-neighbor interpolation while preserving
-     * its aspect ratio and centring it on a background.
-     */
+    /** Scales to fit inside the box with nearest-neighbor interpolation, centred on a background. */
     public static DeckImage pixelFit(
             DeckImage source,
             int width,
@@ -190,9 +158,6 @@ public final class DeckTextures {
         return out;
     }
 
-    /**
-     * Clears the texture cache.
-     */
     public static void invalidate() {
         CACHE.clear();
     }

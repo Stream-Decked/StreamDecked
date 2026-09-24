@@ -6,11 +6,9 @@ import net.neoforged.fml.event.IModBusEvent;
 import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
 
 /**
- * Fired on the <b>mod event bus</b>, once, right after the driver thread starts and before any
- * deck is opened. The place to adjust driver-wide settings. Addons that only want to put buttons
- * on a panel should implement {@link StreamDeckedPlugin}
- * instead.
- *
+ * Fired once on the <b>mod event bus</b> right after the driver thread starts, before any deck
+ * opens. Use to adjust driver-wide settings; addons that only want to put buttons on a panel
+ * should implement {@link StreamDeckedPlugin} instead.
  */
 @SuppressWarnings("unused")
 public class StreamDeckSetupEvent extends Event implements IModBusEvent {
