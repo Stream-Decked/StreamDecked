@@ -6,6 +6,7 @@ import dev.wolfieboy09.sd5j.core.DeckButton;
 import dev.wolfieboy09.sd5j.core.DeckEvent;
 import dev.wolfieboy09.sd5j.core.DeckModel;
 import dev.wolfieboy09.sd5j.core.DeckSurface;
+import dev.wolfieboy09.sd5j.core.DeckText;
 import dev.wolfieboy09.sd5j.core.StreamDeckManager;
 import dev.wolfieboy09.sd5j.remote.RemoteDeckTransport;
 import dev.wolfieboy09.sd5j.core.image.DeckImage;
@@ -166,7 +167,7 @@ public final class StreamDeckDriver {
         NeoForge.EVENT_BUS.post(new DeckLifecycleEvent.Ready(surface));
     }
 
-    /** Groups registered layouts by namespace, captures each into a folder, and lays the folder buttons out on the root. */
+    /** Groups registered layouts by namespace, captures each into a folder, and mounts them under a home button on the root. */
     private static void applyLayouts(DeckSurface surface) {
         DeckModel model = surface.model();
         if (!model.hasKeyScreens()) {
@@ -184,16 +185,37 @@ public final class StreamDeckDriver {
             DeckButton folderButton = buildFolderButton(surface, group.getKey(), group.getValue());
             if (folderButton != null) folderButtons.add(folderButton);
         }
+        if (folderButtons.isEmpty()) return;
 
-        surface.setRootPages(buildRootPages(folderButtons, model));
+        DeckModel.ImageSpec spec = model.keyImage();
+        DeckButton home = DeckButton.folder(
+                DeckText.label(spec.width(), spec.height(), "Decked Out", 0xFFFFFFFF, 0xFF2D3138),
+                buildModListPages(folderButtons, model));
+        Map<Integer, DeckButton> root = new HashMap<>();
+        root.put(0, home);
+        int exitKey = model.keyCount() - 1;
+        if (exitKey != 0) {
+            root.put(exitKey, DeckButton.text("Exit", 0xFFFFFFFF, 0xFF7A2020, StreamDeckDriver::exitModspace));
+        }
+        surface.setRootPage(root);
     }
 
-    /** Concatenates a namespace's entries into one folder button. Null if every entry opted out or failed. */
+    /**
+     * Leaves Modspace: the plugin restores the deck's previous profile, handing it back to
+     * whatever the user was using before the mod took over.
+     */
+    public static void exitModspace() {
+        if (!isInstalled()) return;
+        manager().exitModspace();
+    }
+
+    /** Concatenates a namespace's layouts into one mod folder of layout folders. Null if every entry opted out or failed. */
     @Nullable
     private static DeckButton buildFolderButton(DeckSurface surface, String namespace,
                                                  List<DeckLayoutRegistry.Entry> entries) {
-        List<Map<Integer, DeckButton>> pages = new ArrayList<>();
+        List<DeckButton> layoutFolders = new ArrayList<>();
         DeckImage icon = null;
+        DeckModel.ImageSpec spec = surface.model().keyImage();
 
         for (DeckLayoutRegistry.Entry entry : entries) {
             try {
@@ -201,24 +223,20 @@ public final class StreamDeckDriver {
                 if (!entry.layout().appliesTo(capture)) continue;
 
                 entry.layout().populate(capture);
-                pages.addAll(capture.exportPages());
+                List<Map<Integer, DeckButton>> pages = capture.exportPages();
+                injectFolderNavigation(pages, surface.model());
 
                 if (icon == null) icon = entry.icon();
+                layoutFolders.add(DeckButton.folder(
+                        DeckText.label(spec.width(), spec.height(), entry.id().getPath(), 0xFFFFFFFF, 0xFF2D3138),
+                        pages));
             } catch (Throwable t) {
                 StreamDecked.LOGGER.error("Deck layout {} failed on {}", entry.id(), surface.deckId(), t);
             }
         }
 
-        if (pages.isEmpty() || icon == null) return null;
-
-        try {
-            injectFolderNavigation(pages, surface.model());
-        } catch (IllegalStateException e) {
-            StreamDecked.LOGGER.error("Skipping folder for {}: {}", namespace, e.getMessage());
-            return null;
-        }
-
-        return DeckButton.folder(icon, pages);
+        if (layoutFolders.isEmpty() || icon == null) return null;
+        return DeckButton.folder(icon, buildModListPages(layoutFolders, surface.model()));
     }
 
     /** Adds back/next/previous navigation to every page, in reserved bottom-row slots. */
@@ -254,39 +272,30 @@ public final class StreamDeckDriver {
         }
     }
 
-    /** Lays folder buttons out across one or more root pages, reserving prev/next slots when paginated. */
-    private static List<Map<Integer, DeckButton>> buildRootPages(List<DeckButton> folderButtons, DeckModel model) {
+    /** Lays the registered mod folder buttons out across one or more pages, with back/next/previous navigation. */
+    private static List<Map<Integer, DeckButton>> buildModListPages(List<DeckButton> folders, DeckModel model) {
         int keyCount = model.keyCount();
+        int backKey = keyCount - model.columns();
+        int prevKey = backKey + 1;
         int nextKey = keyCount - 1;
-        int prevKey = Math.max(0, keyCount - model.columns());
-
-        if (folderButtons.isEmpty()) {
-            return List.of(Map.of());
-        }
-        boolean paginated = folderButtons.size() > keyCount;
+        boolean paginated = folders.size() > Math.max(0, keyCount - 1);
 
         List<Integer> contentKeys = new ArrayList<>();
         for (int k = 0; k < keyCount; k++) {
-            if (paginated && (k == nextKey || k == prevKey)) continue;
+            if (k == backKey || (paginated && (k == prevKey || k == nextKey))) continue;
             contentKeys.add(k);
         }
+        if (contentKeys.isEmpty()) return List.of(Map.of());
 
-        if (contentKeys.isEmpty()) {
-            return List.of(Map.of());
-        }
-
-        List<Map<Integer, DeckButton>> rootPages = new ArrayList<>();
-        for (int start = 0; start < folderButtons.size(); start += contentKeys.size()) {
-            int end = Math.min(start + contentKeys.size(), folderButtons.size());
+        List<Map<Integer, DeckButton>> pages = new ArrayList<>();
+        for (int start = 0; start < folders.size(); start += contentKeys.size()) {
+            int end = Math.min(start + contentKeys.size(), folders.size());
             Map<Integer, DeckButton> page = new HashMap<>();
-            for (int i = start; i < end; i++) page.put(contentKeys.get(i - start), folderButtons.get(i));
-            if (paginated) {
-                page.put(nextKey, DeckButton.nextPage("Next", 0xFFFFFFFF, 0xFF202020));
-                page.put(prevKey, DeckButton.previousPage("Prev", 0xFFFFFFFF, 0xFF202020));
-            }
-            rootPages.add(page);
+            for (int i = start; i < end; i++) page.put(contentKeys.get(i - start), folders.get(i));
+            pages.add(page);
         }
-        return rootPages;
+        injectFolderNavigation(pages, model);
+        return pages;
     }
 
     @Nullable
