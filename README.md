@@ -57,10 +57,9 @@ public class ExampleDeckPlugin implements StreamDeckedPlugin {
 
     @Override
     public void registerLayouts(DeckLayoutRegistry registry) {
-        DeckImage icon = DeckTextures.block(Blocks.REDSTONE_BLOCK);
-        if (icon == null) return;   // register rejects a null icon
-
-        registry.register(ID, icon, surface ->
+        // Nothing to unwrap. The ...OrPlaceholder loaders always return a real image, so a
+        // texture that fails to load draws a checkerboard instead of needing a null check.
+        registry.register(ID, DeckTextures.blockOrPlaceholder(Blocks.REDSTONE_BLOCK), surface ->
                 surface.setButton(0, DeckButton.text("Mute", 0xFFFFFFFF, 0xFF7A2020, this::toggleMute)));
     }
 }
