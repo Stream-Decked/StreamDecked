@@ -80,15 +80,15 @@ configurations {
 }
 
 dependencies {
-    jarJar(implementation("dev.wolfieboy09.sd5j:sd5j:${sd5j_version}")) {
+    jarJar(implementation("dev.wolfieboy09.sd5j:sd5j:$sd5j_version")) {
         version {
-            strictly '[1.0.0, 2.0)'
+            strictly "[${sd5j_version},)"
             prefer "${sd5j_version}"
         }
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    additionalRuntimeClasspath "dev.wolfieboy09.sd5j:sd5j:${sd5j_version}"
+    additionalRuntimeClasspath "dev.wolfieboy09.sd5j:sd5j:$sd5j_version"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
