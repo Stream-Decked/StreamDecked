@@ -48,21 +48,6 @@ public abstract class DeckInputEvent extends Event implements ICancellableEvent 
         public int getRow()        { return getModel().rowOf(key); }
     }
 
-    /** A capacitive touch point on a Neo. */
-    public static class TouchPoint extends DeckInputEvent {
-        private final int point;
-        private final boolean pressed;
-
-        public TouchPoint(DeckSurface surface, DeckEvent source, int point, boolean pressed) {
-            super(surface, source);
-            this.point = point;
-            this.pressed = pressed;
-        }
-
-        public int getPoint()      { return point; }
-        public boolean isPressed() { return pressed; }
-    }
-
     /** A rotary encoder on a Stream Deck +, either pushed or turned. */
     public static class Encoder extends DeckInputEvent {
         private final int encoder;
@@ -96,30 +81,23 @@ public abstract class DeckInputEvent extends Event implements ICancellableEvent 
         public boolean isPressed() { return pressed != null && pressed; }
     }
 
-    /** A tap, hold or swipe on the touch strip. Coordinates are in strip pixels. */
+    /** A tap or hold on the touch strip. Coordinates are in whole-strip pixels. */
     public static class Screen extends DeckInputEvent {
-        public enum Kind { TAP, HOLD, SWIPE }
+        public enum Kind { TAP, HOLD }
 
         private final Kind kind;
         private final int x;
         private final int y;
-        private final int toX;
-        private final int toY;
 
-        public Screen(DeckSurface surface, DeckEvent source, Kind kind, int x, int y, int toX, int toY) {
+        public Screen(DeckSurface surface, DeckEvent source, Kind kind, int x, int y) {
             super(surface, source);
             this.kind = kind;
             this.x = x;
             this.y = y;
-            this.toX = toX;
-            this.toY = toY;
         }
 
         public Kind getKind() { return kind; }
         public int getX()     { return x; }
         public int getY()     { return y; }
-        /** End of a swipe; equal to {@link #getX()} for taps and holds. */
-        public int getToX()   { return toX; }
-        public int getToY()   { return toY; }
     }
 }

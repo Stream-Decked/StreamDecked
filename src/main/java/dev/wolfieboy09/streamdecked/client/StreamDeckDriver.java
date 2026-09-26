@@ -306,12 +306,6 @@ public final class StreamDeckDriver {
         if (event instanceof DeckEvent.KeyUp e) {
             return new DeckInputEvent.Key(surface, event, e.key(), false);
         }
-        if (event instanceof DeckEvent.TouchPointDown e) {
-            return new DeckInputEvent.TouchPoint(surface, event, e.point(), true);
-        }
-        if (event instanceof DeckEvent.TouchPointUp e) {
-            return new DeckInputEvent.TouchPoint(surface, event, e.point(), false);
-        }
         if (event instanceof DeckEvent.EncoderDown e) {
             return DeckInputEvent.Encoder.pushed(surface, event, e.encoder(), true);
         }
@@ -323,15 +317,11 @@ public final class StreamDeckDriver {
         }
         if (event instanceof DeckEvent.ScreenTap e) {
             return new DeckInputEvent.Screen(surface, event,
-                    DeckInputEvent.Screen.Kind.TAP, e.x(), e.y(), e.x(), e.y());
+                    DeckInputEvent.Screen.Kind.TAP, e.x(), e.y());
         }
         if (event instanceof DeckEvent.ScreenHold e) {
             return new DeckInputEvent.Screen(surface, event,
-                    DeckInputEvent.Screen.Kind.HOLD, e.x(), e.y(), e.x(), e.y());
-        }
-        if (event instanceof DeckEvent.ScreenSwipe e) {
-            return new DeckInputEvent.Screen(surface, event,
-                    DeckInputEvent.Screen.Kind.SWIPE, e.fromX(), e.fromY(), e.toX(), e.toY());
+                    DeckInputEvent.Screen.Kind.HOLD, e.x(), e.y());
         }
         return null;
     }
