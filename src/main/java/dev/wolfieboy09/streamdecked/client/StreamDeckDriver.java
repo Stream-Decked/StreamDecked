@@ -185,14 +185,15 @@ public final class StreamDeckDriver {
             DeckButton folderButton = buildFolderButton(surface, group.getKey(), group.getValue());
             if (folderButton != null) folderButtons.add(folderButton);
         }
-        if (folderButtons.isEmpty()) return;
 
         DeckModel.ImageSpec spec = model.keyImage();
-        DeckButton home = DeckButton.folder(
-                DeckText.label(spec.width(), spec.height(), "Decked Out", 0xFFFFFFFF, 0xFF2D3138),
-                buildModListPages(folderButtons, model));
         Map<Integer, DeckButton> root = new HashMap<>();
-        root.put(0, home);
+
+        if (!folderButtons.isEmpty()) {
+            root.put(0, DeckButton.folder(
+                    DeckText.label(spec.width(), spec.height(), "Decked Out", 0xFFFFFFFF, 0xFF2D3138),
+                    buildModListPages(folderButtons, model)));
+        }
         int exitKey = model.keyCount() - 1;
         if (exitKey != 0) {
             root.put(exitKey, DeckButton.text("Exit", 0xFFFFFFFF, 0xFF7A2020, StreamDeckDriver::exitModspace));
