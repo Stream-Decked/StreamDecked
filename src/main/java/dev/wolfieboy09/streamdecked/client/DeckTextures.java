@@ -8,12 +8,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** Loads Minecraft textures into {@link DeckImage}s; cached until {@link #invalidate()}. */
@@ -25,9 +25,56 @@ public final class DeckTextures {
 
     private static final Map<ResourceLocation, DeckImage> CACHE = new ConcurrentHashMap<>();
 
-    /** Loads a texture directly from the resource manager, or null if missing. */
-    @Nullable
-    public static DeckImage load(ResourceLocation texture) {
+    /** Side of the square checkerboard {@link #placeholder()} draws. Scaled to fit by callers. */
+    private static final int PLACEHOLDER_SIZE = 64;
+    private static final int PLACEHOLDER_LIGHT = 0xFF3A4048;
+    private static final int PLACEHOLDER_DARK = 0xFF23272D;
+
+    /**
+     * A checkerboard standing in for a texture that could not be loaded, so a missing icon is
+     * visible on the deck instead of silently blank. Scaled to fit whatever it is handed to.
+     */
+    public static DeckImage placeholder() {
+        DeckImage image = new DeckImage(PLACEHOLDER_SIZE, PLACEHOLDER_SIZE);
+        int cell = PLACEHOLDER_SIZE / 8;
+        for (int y = 0; y < PLACEHOLDER_SIZE; y++) {
+            for (int x = 0; x < PLACEHOLDER_SIZE; x++) {
+                boolean light = ((x / cell) + (y / cell)) % 2 == 0;
+                image.set(x, y, light ? PLACEHOLDER_LIGHT : PLACEHOLDER_DARK);
+            }
+        }
+        return image;
+    }
+
+    /** {@link #load(ResourceLocation)}, falling back to {@link #placeholder()}. */
+    public static DeckImage loadOrPlaceholder(ResourceLocation texture) {
+        return load(texture).orElseGet(DeckTextures::placeholder);
+    }
+
+    /** {@link #item(Item)}, falling back to {@link #placeholder()}. */
+    public static DeckImage itemOrPlaceholder(Item item) {
+        return item(item).orElseGet(DeckTextures::placeholder);
+    }
+
+    /** {@link #item(ItemStack)}, falling back to {@link #placeholder()}. */
+    public static DeckImage itemOrPlaceholder(ItemStack stack) {
+        return item(stack).orElseGet(DeckTextures::placeholder);
+    }
+
+    /** {@link #block(Block)}, falling back to {@link #placeholder()}. */
+    public static DeckImage blockOrPlaceholder(Block block) {
+        return block(block).orElseGet(DeckTextures::placeholder);
+    }
+
+    /**
+     * Loads a texture directly from the resource manager.
+     *
+     * <p>Empty when the texture is missing. A missing texture is usually a content problem
+     * rather than a bug, so nothing here throws: an icon that a mod may not have, or one that
+     * only exists in a resource pack, should not stop a deck from being built. Use the
+     * {@code ...OrPlaceholder} variants when you would rather draw something than branch.
+     */
+    public static Optional<DeckImage> load(ResourceLocation texture) {
         ResourceLocation png = ResourceLocation.fromNamespaceAndPath(
                 texture.getNamespace(),
                 texture.getPath().endsWith(".png")
@@ -37,7 +84,7 @@ public final class DeckTextures {
 
         DeckImage cached = CACHE.get(png);
         if (cached != null) {
-            return cached.copy();
+            return Optional.of(cached.copy());
         }
 
         try (InputStream in = Minecraft.getInstance()
@@ -46,17 +93,16 @@ public final class DeckTextures {
 
             DeckImage image = DeckImage.decode(in);
             CACHE.put(png, image);
-            return image.copy();
+            return Optional.of(image.copy());
         } catch (IOException e) {
             LOGGER.warn("Stream Deck texture not found: {}", png);
-            return null;
+            return Optional.empty();
         }
     }
 
 
-    /** Loads an item's conventional texture, or null. */
-    @Nullable
-    public static DeckImage item(Item item) {
+    /** Loads an item's conventional texture. */
+    public static Optional<DeckImage> item(Item item) {
         return item(new ItemStack(item));
     }
 
@@ -64,28 +110,22 @@ public final class DeckTextures {
      * Loads an item's conventional texture. Block items have no item texture and fall back to
      * their block texture ({@code textures/item/...} -> {@code textures/block/...}).
      */
-    @Nullable
-    public static DeckImage item(ItemStack stack) {
+    public static Optional<DeckImage> item(ItemStack stack) {
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
 
-        DeckImage image = load(ResourceLocation.fromNamespaceAndPath(
+        Optional<DeckImage> image = load(ResourceLocation.fromNamespaceAndPath(
                 id.getNamespace(),
                 "textures/item/" + id.getPath() + ".png"
         ));
 
-        if (image == null) {
-            image = load(ResourceLocation.fromNamespaceAndPath(
-                    id.getNamespace(),
-                    "textures/block/" + id.getPath() + ".png"
-            ));
-        }
-
-        return image;
+        return image.isPresent() ? image : load(ResourceLocation.fromNamespaceAndPath(
+                id.getNamespace(),
+                "textures/block/" + id.getPath() + ".png"
+        ));
     }
 
-    /** Loads a block's conventional texture, or null. */
-    @Nullable
-    public static DeckImage block(Block block) {
+    /** Loads a block's conventional texture. */
+    public static Optional<DeckImage> block(Block block) {
         ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
 
         return load(ResourceLocation.fromNamespaceAndPath(
@@ -95,14 +135,15 @@ public final class DeckTextures {
     }
 
     /** Loads an item texture from its registry ID. */
-    public static DeckImage loadItemTexture(ResourceLocation itemId) {
+    public static Optional<DeckImage> loadItemTexture(ResourceLocation itemId) {
         return load(ResourceLocation.fromNamespaceAndPath(
                 itemId.getNamespace(),
                 "textures/item/" + itemId.getPath() + ".png"
         ));
     }
 
-    public static DeckImage loadBlockTexture(ResourceLocation blockId) {
+    /** Loads a block texture from its registry ID. */
+    public static Optional<DeckImage> loadBlockTexture(ResourceLocation blockId) {
         return load(ResourceLocation.fromNamespaceAndPath(
                 blockId.getNamespace(),
                 "textures/block/" + blockId.getPath() + ".png"

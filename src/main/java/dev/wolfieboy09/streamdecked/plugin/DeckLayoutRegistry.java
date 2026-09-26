@@ -2,8 +2,10 @@ package dev.wolfieboy09.streamdecked.plugin;
 
 import dev.wolfieboy09.sd5j.core.DeckLayout;
 import dev.wolfieboy09.sd5j.core.image.DeckImage;
+import dev.wolfieboy09.streamdecked.StreamDecked;
 
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,13 +30,28 @@ public final class DeckLayoutRegistry {
 
     private final Map<ResourceLocation, Entry> entries = new LinkedHashMap<>();
 
-    public void register(ResourceLocation id, DeckImage icon, DeckLayout layout) {
+    /**
+     * Registers a layout, with the icon shown on the Modspace key that enters it.
+     *
+     * <p>The icon is nullable on purpose: a texture that failed to load is a content problem,
+     * not a programming error, and forcing every mod to null-check one shared helper is worse
+     * than a missing folder with a line in the log. Pass
+     * {@code DeckTextures.blockOrPlaceholder(block)} to always get a real image.
+     */
+    public void register(ResourceLocation id, @Nullable DeckImage icon, DeckLayout layout) {
         register(id, icon, PRIORITY_DEFAULT, layout);
     }
 
-    public void register(ResourceLocation id, DeckImage icon, int priority, DeckLayout layout) {
-        if (id == null || icon == null || layout == null) {
-            throw new IllegalArgumentException("id, icon, and layout are required");
+    /** @see #register(ResourceLocation, DeckImage, DeckLayout) */
+    public void register(ResourceLocation id, @Nullable DeckImage icon, int priority, DeckLayout layout) {
+        if (id == null || layout == null) {
+            throw new IllegalArgumentException("id and layout are required");
+        }
+        if (icon == null) {
+            StreamDecked.LOGGER.warn(
+                    "Deck layout {} has no icon, skipping it. The texture is probably missing or only in a resource pack.",
+                    id);
+            return;
         }
         Entry existing = entries.putIfAbsent(id, new Entry(id, priority, icon, layout));
         if (existing != null) {
