@@ -1,9 +1,9 @@
 package dev.wolfieboy09.streamdecked.event;
 
 import dev.wolfieboy09.sd5j.core.StreamDeckManager;
+import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
-import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
 
 /**
  * Fired once on the <b>mod event bus</b> right after the driver thread starts, before any deck

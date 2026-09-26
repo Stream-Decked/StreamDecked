@@ -1,16 +1,14 @@
 package dev.wolfieboy09.streamdecked.client;
 
 import dev.wolfieboy09.streamdecked.StreamDecked;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

@@ -3,15 +3,10 @@ package dev.wolfieboy09.streamdecked.plugin;
 import dev.wolfieboy09.sd5j.core.DeckLayout;
 import dev.wolfieboy09.sd5j.core.image.DeckImage;
 import dev.wolfieboy09.streamdecked.StreamDecked;
-
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Collects layout registrations from every discovered {@link StreamDeckedPlugin}.

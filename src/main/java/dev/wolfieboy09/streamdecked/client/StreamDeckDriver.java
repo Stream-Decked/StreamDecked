@@ -1,15 +1,10 @@
 package dev.wolfieboy09.streamdecked.client;
 
+import dev.wolfieboy09.sd5j.core.*;
+import dev.wolfieboy09.sd5j.core.image.DeckImage;
+import dev.wolfieboy09.sd5j.remote.RemoteDeckTransport;
 import dev.wolfieboy09.streamdecked.StreamDecked;
 import dev.wolfieboy09.streamdecked.StreamDeckedMixinDetection;
-import dev.wolfieboy09.sd5j.core.DeckButton;
-import dev.wolfieboy09.sd5j.core.DeckEvent;
-import dev.wolfieboy09.sd5j.core.DeckModel;
-import dev.wolfieboy09.sd5j.core.DeckSurface;
-import dev.wolfieboy09.sd5j.core.DeckText;
-import dev.wolfieboy09.sd5j.core.StreamDeckManager;
-import dev.wolfieboy09.sd5j.remote.RemoteDeckTransport;
-import dev.wolfieboy09.sd5j.core.image.DeckImage;
 import dev.wolfieboy09.streamdecked.event.DeckInputEvent;
 import dev.wolfieboy09.streamdecked.event.DeckLifecycleEvent;
 import dev.wolfieboy09.streamdecked.event.StreamDeckSetupEvent;
@@ -21,11 +16,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
