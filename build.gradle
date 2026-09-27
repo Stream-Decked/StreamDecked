@@ -29,15 +29,10 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     version = project.neo_version
-
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
 
     runs {
         client {
@@ -57,7 +52,7 @@ neoForge {
         }
 
         data {
-            data()
+            clientData()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
@@ -88,7 +83,6 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    additionalRuntimeClasspath "dev.wolfieboy09.sd5j:sd5j:$sd5j_version"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
