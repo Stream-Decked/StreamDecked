@@ -5,7 +5,7 @@ A Minecraft mod that gives your mods a Stream Deck.
 Ever have a mod with way too many keybinds? Well look no further! You can use Stream Decks to
 have less keybinds to press.
 
-StreamDecked connects to the [DeckedOut MC](https://github.com/Stream-Decked/elgato-plugin)
+StreamDecked connects to the [StreamDecked plugin](https://github.com/Stream-Decked/elgato-plugin)
 Stream Deck plugin over a local WebSocket, takes the deck over with a profile called Modspace,
 and turns that deck into a screen your mods draw their own buttons on.
 
@@ -26,7 +26,7 @@ and turns that deck into a screen your mods draw their own buttons on.
 - Minecraft 1.21.1
 - NeoForge 21.1.250 or newer
 - Java 21
-- The DeckedOut MC Stream Deck plugin, which the mod asks the Stream Deck app to install
+- The StreamDecked Stream Deck plugin, which the mod asks the Stream Deck app to install
 
 ## Using it
 

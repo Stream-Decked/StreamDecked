@@ -198,7 +198,7 @@ public final class StreamDeckDriver {
 
         if (!folderButtons.isEmpty()) {
             root.put(0, DeckButton.folder(
-                    DeckText.label(spec.width(), spec.height(), "Decked Out", 0xFFFFFFFF, 0xFF2D3138),
+                    DeckText.label(spec.width(), spec.height(), "StreamDecked", 0xFFFFFFFF, 0xFF2D3138),
                     buildModListPages(folderButtons, model), HOME_ID));
         }
         int exitKey = model.keyCount() - 1;
