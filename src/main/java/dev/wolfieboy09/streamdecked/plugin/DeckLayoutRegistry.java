@@ -1,7 +1,7 @@
 package dev.wolfieboy09.streamdecked.plugin;
 
-import dev.wolfieboy09.sd5j.core.DeckLayout;
-import dev.wolfieboy09.sd5j.core.image.DeckImage;
+import dev.wolfieboy09.sd5j.image.DeckImage;
+import dev.wolfieboy09.sd5j.layout.DeckLayout;
 import dev.wolfieboy09.streamdecked.StreamDecked;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;

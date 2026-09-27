@@ -7,9 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import dev.wolfieboy09.streamdecked.StreamDecked;
-
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforgespi.locating.IModFile;
 

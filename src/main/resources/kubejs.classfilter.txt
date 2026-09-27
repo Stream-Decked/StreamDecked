@@ -1,9 +1,9 @@
-+dev.wolfieboy09.sd5j.core
++dev.wolfieboy09.sd5j.layout
++dev.wolfieboy09.sd5j.button
++dev.wolfieboy09.sd5j.image
++dev.wolfieboy09.sd5j.deck.DeckModel
 +dev.wolfieboy09.streamdecked.event
 +dev.wolfieboy09.streamdecked.plugin
 
 -dev.wolfieboy09.streamdecked.client
--dev.wolfieboy09.sd5j.core.StreamDeck
--dev.wolfieboy09.sd5j.core.StreamDeckManager
--dev.wolfieboy09.sd5j.core.DeckEvent
 -dev.wolfieboy09.streamdecked.StreamDecked

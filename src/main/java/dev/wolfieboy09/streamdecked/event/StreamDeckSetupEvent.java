@@ -1,6 +1,6 @@
 package dev.wolfieboy09.streamdecked.event;
 
-import dev.wolfieboy09.sd5j.core.StreamDeckManager;
+import dev.wolfieboy09.sd5j.deck.StreamDeckManager;
 import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;

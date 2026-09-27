@@ -1,9 +1,9 @@
 package dev.wolfieboy09.streamdecked.event;
 
-import dev.wolfieboy09.sd5j.core.DeckButton;
-import dev.wolfieboy09.sd5j.core.DeckEvent;
-import dev.wolfieboy09.sd5j.core.DeckModel;
-import dev.wolfieboy09.sd5j.core.DeckSurface;
+import dev.wolfieboy09.sd5j.button.DeckButton;
+import dev.wolfieboy09.sd5j.deck.DeckModel;
+import dev.wolfieboy09.sd5j.event.DeckEvent;
+import dev.wolfieboy09.sd5j.layout.DeckSurface;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 

@@ -1,7 +1,12 @@
 package dev.wolfieboy09.streamdecked.client;
 
-import dev.wolfieboy09.sd5j.core.*;
-import dev.wolfieboy09.sd5j.core.image.DeckImage;
+import dev.wolfieboy09.sd5j.button.DeckButton;
+import dev.wolfieboy09.sd5j.button.DeckText;
+import dev.wolfieboy09.sd5j.deck.DeckModel;
+import dev.wolfieboy09.sd5j.deck.StreamDeckManager;
+import dev.wolfieboy09.sd5j.event.DeckEvent;
+import dev.wolfieboy09.sd5j.image.DeckImage;
+import dev.wolfieboy09.sd5j.layout.DeckSurface;
 import dev.wolfieboy09.sd5j.remote.RemoteDeckTransport;
 import dev.wolfieboy09.streamdecked.StreamDecked;
 import dev.wolfieboy09.streamdecked.StreamDeckedMixinDetection;
@@ -245,11 +250,10 @@ public final class StreamDeckDriver {
 
     /** Adds back/next/previous navigation to every page, in reserved bottom-row slots. */
     private static void injectFolderNavigation(List<Map<Integer, DeckButton>> pages, DeckModel model) {
-        int keyCount = model.keyCount();
-        int backKey = keyCount - model.columns();
+        int backKey = model.backKey();
         boolean paginated = pages.size() > 1;
-        int prevKey = backKey + 1;
-        int nextKey = keyCount - 1;
+        int prevKey = model.previousKey();
+        int nextKey = model.nextKey();
 
         for (Map<Integer, DeckButton> page : pages) {
             if (page.containsKey(backKey)) {
@@ -267,10 +271,10 @@ public final class StreamDeckDriver {
 
         for (int i = 0; i < pages.size(); i++) {
             Map<Integer, DeckButton> page = new HashMap<>(pages.get(i));
-            page.put(backKey, DeckButton.back("Back", 0xFFFFFFFF, 0xFF202020));
+            page.put(backKey, DeckButton.back());
             if (paginated) {
-                page.put(nextKey, DeckButton.nextPage("Next", 0xFFFFFFFF, 0xFF202020));
-                page.put(prevKey, DeckButton.previousPage("Prev", 0xFFFFFFFF, 0xFF202020));
+                page.put(nextKey, DeckButton.nextPage());
+                page.put(prevKey, DeckButton.previousPage());
             }
             pages.set(i, page);
         }
@@ -279,9 +283,9 @@ public final class StreamDeckDriver {
     /** Lays the registered mod folder buttons out across one or more pages, with back/next/previous navigation. */
     private static List<Map<Integer, DeckButton>> buildModListPages(List<DeckButton> folders, DeckModel model) {
         int keyCount = model.keyCount();
-        int backKey = keyCount - model.columns();
-        int prevKey = backKey + 1;
-        int nextKey = keyCount - 1;
+        int backKey = model.backKey();
+        int prevKey = model.previousKey();
+        int nextKey = model.nextKey();
         boolean paginated = folders.size() > Math.max(0, keyCount - 1);
 
         List<Integer> contentKeys = new ArrayList<>();
