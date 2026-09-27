@@ -1,0 +1,87 @@
+name: Bug report
+description: The mod runs but behaves differently from how it is documented.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    value: |
+      For a game that crashes or fails to start, use the "Minecraft crash report" template.
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: StreamDecked version
+      placeholder: "1.0.4"
+    validations:
+      required: true
+
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft version
+      placeholder: "1.21.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the mod?
+      options:
+        - Connecting to the Stream Deck app
+        - Modspace profile and takeover
+        - Layouts and folders
+        - Buttons and paging
+        - Images and textures
+        - Input, dials and touchscreen
+        - Events for other mods
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deck
+    attributes:
+      label: Stream Deck model
+      options:
+        - Stream Deck (original)
+        - Stream Deck Mini
+        - Stream Deck MK.2
+        - Stream Deck +
+        - Stream Deck XL
+        - Stream Deck Neo
+        - No deck connected
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log lines
+      description: >
+        The game log is in `logs/latest.log`. Lines mentioning StreamDecked, the deck model,
+        or a layout failing are the useful ones.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other mods installed
+    validations:
+      required: false

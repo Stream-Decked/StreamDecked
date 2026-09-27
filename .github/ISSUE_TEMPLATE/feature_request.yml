@@ -1,0 +1,43 @@
+name: Feature request
+description: Ask for something new in the mod.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The goal rather than the API. What should a mod be able to put on the deck?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Which part of the mod?
+      options:
+        - Layout registration and folders
+        - Runtime buttons and paging
+        - Images and text
+        - Input events for other mods
+        - Device discovery and models
+        - Packaging and publishing
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would the API look like?
+      description: A sketch is fine. Include how it reads at the call site.
+      render: java
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What have you tried instead?
+    validations:
+      required: false

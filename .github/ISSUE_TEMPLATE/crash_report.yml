@@ -1,0 +1,79 @@
+name: Minecraft crash report
+description: The game crashed, usually on startup or when the deck is connected.
+title: "[Crash]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    value: |
+      Please attach the file rather than pasting it. `logs/latest.log` and the crash report in
+          `crash-reports/` sit next to the save, and the report is the part that matters.
+
+  - type: dropdown
+    id: cause
+    attributes:
+      label: What were you doing when it crashed?
+      options:
+        - On startup, before a deck was touched
+        - Starting the game with a deck plugged in
+        - While the deck was showing Modspace
+        - While the deck was showing my own profile
+        - After connecting or disconnecting a deck
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft version
+      placeholder: "1.21.1"
+    validations:
+      required: true
+
+  - type: input
+    id: neoforge-version
+    attributes:
+      label: NeoForge version
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: StreamDecked version
+      description: The version in the mod list, or in `gradle.properties`.
+      placeholder: "1.0.4"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deck
+    attributes:
+      label: Stream Deck model
+      options:
+        - Stream Deck (original)
+        - Stream Deck Mini
+        - Stream Deck MK.2
+        - Stream Deck +
+        - Stream Deck XL
+        - Stream Deck Neo
+        - No deck connected
+    validations:
+      required: true
+
+  - type: textarea
+    id: crash-file
+    attributes:
+      label: Crash report
+      description: Drag the `crash-*.txt` file in, or paste the stack trace.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other mods installed
+      description: Especially anything that draws on the deck, or that inspects devices.
+    validations:
+      required: false
