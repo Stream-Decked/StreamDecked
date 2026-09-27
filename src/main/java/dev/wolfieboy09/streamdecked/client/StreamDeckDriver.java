@@ -11,6 +11,7 @@ import dev.wolfieboy09.streamdecked.event.StreamDeckSetupEvent;
 import dev.wolfieboy09.streamdecked.plugin.DeckLayoutRegistry;
 import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
 import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPluginLoader;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -29,6 +30,16 @@ public final class StreamDeckDriver {
     private StreamDeckDriver() {}
 
     private static final Map<String, DeckSurface> SURFACES = new ConcurrentHashMap<>();
+
+    /**
+     * Folder id of the Modspace home button, so a plugin can recognize it the same way it
+     * recognizes the folder generated for its own layout.
+     */
+    public static final String HOME_ID =
+            ResourceLocation.fromNamespaceAndPath(StreamDecked.MOD_ID, "home").toString();
+
+    /** Path used for the id of a generated per-namespace folder, e.g. {@code streamiss:folder}. */
+    private static final String FOLDER_PATH = "folder";
 
     private static volatile StreamDeckManager manager;
     private static volatile List<DeckLayoutRegistry.Entry> layouts = List.of();
@@ -183,7 +194,7 @@ public final class StreamDeckDriver {
         if (!folderButtons.isEmpty()) {
             root.put(0, DeckButton.folder(
                     DeckText.label(spec.width(), spec.height(), "Decked Out", 0xFFFFFFFF, 0xFF2D3138),
-                    buildModListPages(folderButtons, model)));
+                    buildModListPages(folderButtons, model), HOME_ID));
         }
         int exitKey = model.keyCount() - 1;
         if (exitKey != 0) {
@@ -221,14 +232,15 @@ public final class StreamDeckDriver {
                 if (icon == null) icon = entry.icon();
                 layoutFolders.add(DeckButton.folder(
                         DeckText.label(spec.width(), spec.height(), entry.id().getPath(), 0xFFFFFFFF, 0xFF2D3138),
-                        pages));
+                        pages, entry.id().toString()));
             } catch (Throwable t) {
                 StreamDecked.LOGGER.error("Deck layout {} failed on {}", entry.id(), surface.deckId(), t);
             }
         }
 
         if (layoutFolders.isEmpty() || icon == null) return null;
-        return DeckButton.folder(icon, buildModListPages(layoutFolders, surface.model()));
+        return DeckButton.folder(icon, buildModListPages(layoutFolders, surface.model()),
+                ResourceLocation.fromNamespaceAndPath(namespace, FOLDER_PATH).toString());
     }
 
     /** Adds back/next/previous navigation to every page, in reserved bottom-row slots. */
