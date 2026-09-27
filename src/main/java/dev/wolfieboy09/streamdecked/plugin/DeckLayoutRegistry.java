@@ -3,7 +3,7 @@ package dev.wolfieboy09.streamdecked.plugin;
 import dev.wolfieboy09.sd5j.image.DeckImage;
 import dev.wolfieboy09.sd5j.layout.DeckLayout;
 import dev.wolfieboy09.streamdecked.StreamDecked;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -17,13 +17,13 @@ import java.util.*;
 @SuppressWarnings("unused")
 public final class DeckLayoutRegistry {
     /** A registered layout with the identity, icon, and ordering it was registered under. */
-    public record Entry(ResourceLocation id, int priority, DeckImage icon, DeckLayout layout) {}
+    public record Entry(Identifier id, int priority, DeckImage icon, DeckLayout layout) {}
 
     public static final int PRIORITY_LOWEST = -1000;
     public static final int PRIORITY_DEFAULT = 0;
     public static final int PRIORITY_HIGHEST = 1000;
 
-    private final Map<ResourceLocation, Entry> entries = new LinkedHashMap<>();
+    private final Map<Identifier, Entry> entries = new LinkedHashMap<>();
 
     /**
      * Registers a layout, with the icon shown on the Modspace key that enters it.
@@ -33,12 +33,12 @@ public final class DeckLayoutRegistry {
      * than a missing folder with a line in the log. Pass
      * {@code DeckTextures.blockOrPlaceholder(block)} to always get a real image.
      */
-    public void register(ResourceLocation id, @Nullable DeckImage icon, DeckLayout layout) {
+    public void register(Identifier id, @Nullable DeckImage icon, DeckLayout layout) {
         register(id, icon, PRIORITY_DEFAULT, layout);
     }
 
-    /** @see #register(ResourceLocation, DeckImage, DeckLayout) */
-    public void register(ResourceLocation id, @Nullable DeckImage icon, int priority, DeckLayout layout) {
+    /** @see #register(Identifier, DeckImage, DeckLayout) */
+    public void register(Identifier id, @Nullable DeckImage icon, int priority, DeckLayout layout) {
         if (id == null || layout == null) {
             throw new IllegalArgumentException("id and layout are required");
         }
@@ -54,7 +54,7 @@ public final class DeckLayoutRegistry {
         }
     }
 
-    public boolean isRegistered(ResourceLocation id) {
+    public boolean isRegistered(Identifier id) {
         return entries.containsKey(id);
     }
 

@@ -3,12 +3,13 @@ package dev.wolfieboy09.streamdecked;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.streamdecked.client.DeckTextureReloadListener;
 import dev.wolfieboy09.streamdecked.client.StreamDeckDriver;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import org.slf4j.Logger;
@@ -31,8 +32,8 @@ public class StreamDecked {
         event.enqueueWork(StreamDeckDriver::install);
     }
 
-    private void onClientReload(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener(new DeckTextureReloadListener());
+    private void onClientReload(AddClientReloadListenersEvent event) {
+        event.addListener(Identifier.fromNamespaceAndPath(MOD_ID, "cleaner"), new DeckTextureReloadListener());
     }
 
     private void clientShutdown(GameShuttingDownEvent event) {

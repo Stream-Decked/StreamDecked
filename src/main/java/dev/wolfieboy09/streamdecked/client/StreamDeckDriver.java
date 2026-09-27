@@ -16,7 +16,7 @@ import dev.wolfieboy09.streamdecked.event.StreamDeckSetupEvent;
 import dev.wolfieboy09.streamdecked.plugin.DeckLayoutRegistry;
 import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPlugin;
 import dev.wolfieboy09.streamdecked.plugin.StreamDeckedPluginLoader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -41,7 +41,7 @@ public final class StreamDeckDriver {
      * recognizes the folder generated for its own layout.
      */
     public static final String HOME_ID =
-            ResourceLocation.fromNamespaceAndPath(StreamDecked.MOD_ID, "home").toString();
+            Identifier.fromNamespaceAndPath(StreamDecked.MOD_ID, "home").toString();
 
     /** Path used for the id of a generated per-namespace folder, e.g. {@code streamiss:folder}. */
     private static final String FOLDER_PATH = "folder";
@@ -245,7 +245,7 @@ public final class StreamDeckDriver {
 
         if (layoutFolders.isEmpty() || icon == null) return null;
         return DeckButton.folder(icon, buildModListPages(layoutFolders, surface.model()),
-                ResourceLocation.fromNamespaceAndPath(namespace, FOLDER_PATH).toString());
+                Identifier.fromNamespaceAndPath(namespace, FOLDER_PATH).toString());
     }
 
     /** Adds back/next/previous navigation to every page, in reserved bottom-row slots. */

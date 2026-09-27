@@ -12,7 +12,6 @@ import net.neoforged.fml.event.IModBusEvent;
  */
 @SuppressWarnings("unused")
 public class StreamDeckSetupEvent extends Event implements IModBusEvent {
-
     private final StreamDeckManager manager;
     private int defaultBrightness = 80;
     private boolean resetOnConnect = true;

@@ -66,7 +66,7 @@ public final class StreamDeckedPluginLoader {
             String modId = modInfo.getModId();
             IModFile file = modInfo.getOwningFile().getFile();
 
-            Path resourcePath = file.findResource(FILE_NAME);
+            Path resourcePath = file.getFilePath().resolve(FILE_NAME);
             if (!Files.exists(resourcePath)) continue;
 
             byte[] data;

@@ -14,7 +14,6 @@ import net.neoforged.bus.api.ICancellableEvent;
  */
 @SuppressWarnings("unused")
 public abstract class DeckInputEvent extends Event implements ICancellableEvent {
-
     private final DeckSurface surface;
     private final DeckEvent source;
 

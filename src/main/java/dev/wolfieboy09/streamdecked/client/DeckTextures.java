@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.sd5j.image.DeckImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -23,7 +23,7 @@ public final class DeckTextures {
 
     private DeckTextures() {}
 
-    private static final Map<ResourceLocation, DeckImage> CACHE = new ConcurrentHashMap<>();
+    private static final Map<Identifier, DeckImage> CACHE = new ConcurrentHashMap<>();
 
     /** Side of the square checkerboard {@link #placeholder()} draws. Scaled to fit by callers. */
     private static final int PLACEHOLDER_SIZE = 64;
@@ -46,8 +46,8 @@ public final class DeckTextures {
         return image;
     }
 
-    /** {@link #load(ResourceLocation)}, falling back to {@link #placeholder()}. */
-    public static DeckImage loadOrPlaceholder(ResourceLocation texture) {
+    /** {@link #load(Identifier)}, falling back to {@link #placeholder()}. */
+    public static DeckImage loadOrPlaceholder(Identifier texture) {
         return load(texture).orElseGet(DeckTextures::placeholder);
     }
 
@@ -74,8 +74,8 @@ public final class DeckTextures {
      * only exists in a resource pack, should not stop a deck from being built. Use the
      * {@code ...OrPlaceholder} variants when you would rather draw something than branch.
      */
-    public static Optional<DeckImage> load(ResourceLocation texture) {
-        ResourceLocation png = ResourceLocation.fromNamespaceAndPath(
+    public static Optional<DeckImage> load(Identifier texture) {
+        Identifier png = Identifier.fromNamespaceAndPath(
                 texture.getNamespace(),
                 texture.getPath().endsWith(".png")
                         ? texture.getPath()
@@ -111,14 +111,14 @@ public final class DeckTextures {
      * their block texture ({@code textures/item/...} -> {@code textures/block/...}).
      */
     public static Optional<DeckImage> item(ItemStack stack) {
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
 
-        Optional<DeckImage> image = load(ResourceLocation.fromNamespaceAndPath(
+        Optional<DeckImage> image = load(Identifier.fromNamespaceAndPath(
                 id.getNamespace(),
                 "textures/item/" + id.getPath() + ".png"
         ));
 
-        return image.isPresent() ? image : load(ResourceLocation.fromNamespaceAndPath(
+        return image.isPresent() ? image : load(Identifier.fromNamespaceAndPath(
                 id.getNamespace(),
                 "textures/block/" + id.getPath() + ".png"
         ));
@@ -126,25 +126,25 @@ public final class DeckTextures {
 
     /** Loads a block's conventional texture. */
     public static Optional<DeckImage> block(Block block) {
-        ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
+        Identifier id = BuiltInRegistries.BLOCK.getKey(block);
 
-        return load(ResourceLocation.fromNamespaceAndPath(
+        return load(Identifier.fromNamespaceAndPath(
                 id.getNamespace(),
                 "textures/block/" + id.getPath() + ".png"
         ));
     }
 
     /** Loads an item texture from its registry ID. */
-    public static Optional<DeckImage> loadItemTexture(ResourceLocation itemId) {
-        return load(ResourceLocation.fromNamespaceAndPath(
+    public static Optional<DeckImage> loadItemTexture(Identifier itemId) {
+        return load(Identifier.fromNamespaceAndPath(
                 itemId.getNamespace(),
                 "textures/item/" + itemId.getPath() + ".png"
         ));
     }
 
     /** Loads a block texture from its registry ID. */
-    public static Optional<DeckImage> loadBlockTexture(ResourceLocation blockId) {
-        return load(ResourceLocation.fromNamespaceAndPath(
+    public static Optional<DeckImage> loadBlockTexture(Identifier blockId) {
+        return load(Identifier.fromNamespaceAndPath(
                 blockId.getNamespace(),
                 "textures/block/" + blockId.getPath() + ".png"
         ));
